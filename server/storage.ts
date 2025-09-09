@@ -45,6 +45,12 @@ export class MemStorage implements IStorage {
       ...insertAnalysis,
       id,
       status: insertAnalysis.status || "processing",
+      insights: insertAnalysis.insights || null,
+      metrics: insertAnalysis.metrics || null,
+      chartData: insertAnalysis.chartData || null,
+      variances: insertAnalysis.variances || null,
+      ratios: insertAnalysis.ratios || null,
+      rawData: insertAnalysis.rawData || null,
       createdAt: now,
       updatedAt: now,
     };

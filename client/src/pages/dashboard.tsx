@@ -34,9 +34,9 @@ export default function Dashboard({}: DashboardProps) {
   const { data: analysis, isLoading } = useQuery<Analysis>({
     queryKey: ['/api/analysis', currentAnalysisId],
     enabled: !!currentAnalysisId,
-    refetchInterval: (data) => {
+    refetchInterval: (query) => {
       // Stop polling when analysis is complete or failed
-      return data?.status === 'processing' ? 2000 : false;
+      return query.state.data?.status === 'processing' ? 2000 : false;
     },
   });
 
@@ -93,7 +93,7 @@ export default function Dashboard({}: DashboardProps) {
             <MetricsOverview analysis={analysis} />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <AiInsights insights={analysis.insights} />
+              <AiInsights insights={analysis.insights || []} />
               <RevenueChart chartData={analysis.chartData?.revenueChart} />
             </div>
 

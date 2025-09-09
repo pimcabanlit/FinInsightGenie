@@ -24,8 +24,8 @@ export default function AnalysisProgress({ analysisId }: AnalysisProgressProps) 
   const { data: progress } = useQuery<ProgressData>({
     queryKey: ['/api/analysis', analysisId, 'progress'],
     enabled: !!analysisId,
-    refetchInterval: (data) => {
-      return data?.status === 'processing' ? 1000 : false;
+    refetchInterval: (query) => {
+      return query.state.data?.status === 'processing' ? 1000 : false;
     },
   });
 
