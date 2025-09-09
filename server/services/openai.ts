@@ -65,56 +65,146 @@ export async function analyzeFinancialData(
 function createAnalysisPrompt(data: any[], analysisDepth: string): string {
   const dataString = JSON.stringify(data, null, 2);
   
-  const depthInstructions = {
-    basic: "Focus on key metrics, major trends, and significant variances (>10%). Provide 2-3 main insights.",
-    detailed: "Provide comprehensive analysis including ratios, horizontal/vertical analysis, trend analysis, and detailed variance explanation. Include 4-6 insights.",
-    executive: "Create a high-level executive summary focusing on strategic implications, key risks, and opportunities. Provide 2-4 strategic insights."
-  };
-
-  return `
-Analyze this financial statement data and provide insights based on ${analysisDepth} analysis depth.
+  if (analysisDepth === 'basic') {
+    return `
+You are performing a BASIC ANALYSIS for a finance team. Keep this simple and focused on the most important numbers.
 
 Financial Data:
 ${dataString}
 
-Analysis Requirements:
+BASIC ANALYSIS REQUIREMENTS:
 1. Determine if this is a Balance Sheet or Income Statement
-2. ${depthInstructions[analysisDepth as keyof typeof depthInstructions]}
-3. Identify variances exceeding 10% threshold
-4. Calculate relevant financial ratios where possible
-5. Provide actionable recommendations
+2. Focus ONLY on the 3 most important financial metrics
+3. Identify ONLY variances above 15% (not 10%)
+4. Provide exactly 2 main insights - keep them simple and actionable
+5. Give 2 basic recommendations that non-financial managers can understand
 
-Return analysis in this JSON format:
+Return this JSON format:
 {
   "statementType": "balance_sheet" | "income_statement",
   "insights": [
     {
       "type": "positive" | "warning" | "info",
-      "title": "Insight Title",
-      "description": "Detailed explanation",
+      "title": "Simple insight title (max 6 words)",
+      "description": "Plain language explanation (max 50 words)",
       "severity": "low" | "medium" | "high"
     }
   ],
-  "recommendations": ["Recommendation 1", "Recommendation 2"],
+  "recommendations": ["Simple action 1", "Simple action 2"],
   "keyMetrics": {
-    "totalRevenue": number,
-    "netIncome": number,
-    "totalAssets": number,
-    "currentRatio": number,
-    "debtToEquity": number,
-    "grossMargin": number,
-    "netMargin": number
+    "totalRevenue": number_or_null,
+    "netIncome": number_or_null,
+    "totalAssets": number_or_null
   },
   "variances": [
     {
       "item": "Line item name",
       "change": percentage_change,
       "type": "revenue" | "expense" | "asset" | "liability",
+      "severity": "medium" | "high"
+    }
+  ]
+}
+`;
+  } else if (analysisDepth === 'detailed') {
+    return `
+You are performing a DETAILED ANALYSIS for experienced finance professionals. Include comprehensive technical analysis.
+
+Financial Data:
+${dataString}
+
+DETAILED ANALYSIS REQUIREMENTS:
+1. Determine if this is a Balance Sheet or Income Statement
+2. Calculate and analyze ALL relevant financial ratios (current ratio, debt-to-equity, ROA, ROE, gross margin, net margin, asset turnover)
+3. Perform horizontal analysis (period-over-period changes)
+4. Perform vertical analysis (components as % of total)
+5. Identify variances above 5% threshold
+6. Provide exactly 5-6 technical insights with detailed explanations
+7. Include trend analysis and ratio benchmarking
+8. Give 4-5 specific technical recommendations
+
+Return this JSON format:
+{
+  "statementType": "balance_sheet" | "income_statement",
+  "insights": [
+    {
+      "type": "positive" | "warning" | "info", 
+      "title": "Technical insight title",
+      "description": "Detailed technical explanation with specific numbers and ratios (100-150 words)",
+      "severity": "low" | "medium" | "high"
+    }
+  ],
+  "recommendations": ["Technical recommendation 1", "Technical recommendation 2", "Technical recommendation 3", "Technical recommendation 4"],
+  "keyMetrics": {
+    "totalRevenue": number_or_null,
+    "netIncome": number_or_null,
+    "totalAssets": number_or_null,
+    "currentRatio": number_or_null,
+    "debtToEquity": number_or_null,
+    "grossMargin": number_or_null,
+    "netMargin": number_or_null,
+    "roa": number_or_null,
+    "roe": number_or_null,
+    "assetTurnover": number_or_null
+  },
+  "variances": [
+    {
+      "item": "Line item name",
+      "change": percentage_change,
+      "type": "revenue" | "expense" | "asset" | "liability", 
       "severity": "low" | "medium" | "high"
     }
   ]
 }
 `;
+  } else { // executive
+    return `
+You are preparing an EXECUTIVE SUMMARY for C-level executives and board members. Focus on strategic business implications.
+
+Financial Data:
+${dataString}
+
+EXECUTIVE SUMMARY REQUIREMENTS:
+1. Determine if this is a Balance Sheet or Income Statement
+2. Focus on strategic business performance and competitive positioning
+3. Identify key business risks and opportunities 
+4. Analyze cash flow implications and capital allocation efficiency
+5. Provide exactly 3 strategic insights focused on business direction
+6. Include market context and industry implications where relevant
+7. Give 3 board-level strategic recommendations
+
+Return this JSON format:
+{
+  "statementType": "balance_sheet" | "income_statement",
+  "insights": [
+    {
+      "type": "positive" | "warning" | "info",
+      "title": "Strategic insight title",
+      "description": "Business strategy focused explanation discussing market position, competitive advantage, or strategic risk (75-100 words)",
+      "severity": "low" | "medium" | "high"
+    }
+  ],
+  "recommendations": ["Strategic recommendation 1", "Strategic recommendation 2", "Strategic recommendation 3"], 
+  "keyMetrics": {
+    "totalRevenue": number_or_null,
+    "netIncome": number_or_null,
+    "totalAssets": number_or_null,
+    "currentRatio": number_or_null,
+    "debtToEquity": number_or_null,
+    "grossMargin": number_or_null,
+    "netMargin": number_or_null
+  },
+  "variances": [
+    {
+      "item": "Line item name", 
+      "change": percentage_change,
+      "type": "revenue" | "expense" | "asset" | "liability",
+      "severity": "medium" | "high"
+    }
+  ]
+}
+`;
+  }
 }
 
 function validateAnalysisResult(result: any): AnalysisResult {
