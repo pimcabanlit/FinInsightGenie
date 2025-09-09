@@ -3,8 +3,7 @@ import FileUpload from "@/components/file-upload";
 import AnalysisProgress from "@/components/analysis-progress";
 import MetricsOverview from "@/components/metrics-overview";
 import AiInsights from "@/components/ai-insights";
-import RevenueChart from "@/components/charts/revenue-chart";
-import ProfitabilityChart from "@/components/charts/profitability-chart";
+import BalanceSheetChart from "@/components/charts/balance-sheet-chart";
 import FinancialRatios from "@/components/financial-ratios";
 import VarianceAnalysis from "@/components/variance-analysis";
 import ExportPanel from "@/components/export-panel";
@@ -18,8 +17,7 @@ interface Analysis {
   statementType: string | null;
   insights?: any[];
   chartData?: {
-    revenueChart?: any;
-    profitabilityChart?: any;
+    balanceSheetChart?: any;
   };
   ratios?: any;
   variances?: any[];
@@ -94,11 +92,10 @@ export default function Dashboard({}: DashboardProps) {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <AiInsights insights={analysis.insights || []} />
-              <RevenueChart chartData={analysis.chartData?.revenueChart} />
+              <BalanceSheetChart chartData={analysis.chartData?.balanceSheetChart} />
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <ProfitabilityChart chartData={analysis.chartData?.profitabilityChart} />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <FinancialRatios ratios={analysis.ratios} />
               <VarianceAnalysis variances={analysis.variances} />
             </div>

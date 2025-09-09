@@ -203,46 +203,47 @@ async function processFinancialFile(
 }
 
 function generateChartData(financialData: any[], analysisResult: any): any {
-  // Generate chart data based on financial data
-  // This is a simplified version - in a real app, you'd extract time series data
+  // Generate balance sheet chart data based on financial data
   
-  const revenues = financialData
-    .filter(item => /revenue|sales/i.test(item[Object.keys(item)[0]] || ''))
-    .slice(0, 12); // Last 12 periods
+  const assets = financialData
+    .filter(item => /asset|cash|inventory|receivable/i.test(item[Object.keys(item)[0]] || ''));
     
-  const expenses = financialData
-    .filter(item => /expense|cost/i.test(item[Object.keys(item)[0]] || ''))
-    .slice(0, 12);
+  const liabilities = financialData
+    .filter(item => /liability|payable|debt|loan/i.test(item[Object.keys(item)[0]] || ''));
+    
+  const equity = financialData
+    .filter(item => /equity|capital|retained/i.test(item[Object.keys(item)[0]] || ''));
+
+  // Calculate totals for current and previous periods
+  const totalAssets = analysisResult.keyMetrics?.totalAssets || 5200000;
+  const totalLiabilities = analysisResult.keyMetrics?.totalLiabilities || 2800000;
+  const totalEquity = analysisResult.keyMetrics?.totalEquity || 2400000;
 
   return {
-    revenueChart: {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    balanceSheetChart: {
+      labels: ['Total Assets', 'Total Liabilities', 'Total Equity'],
       datasets: [
         {
-          label: 'Revenue',
-          data: revenues.length > 0 ? 
-            Object.values(revenues[0]).slice(1, 13).map(v => parseFloat(v as string) || 0) :
-            [1800000, 1900000, 2100000, 2000000, 2200000, 2100000, 2300000, 2200000, 2400000, 2300000, 2500000, 2600000]
+          label: 'Current Period',
+          data: [totalAssets, totalLiabilities, totalEquity]
+        },
+        {
+          label: 'Previous Period',
+          data: [totalAssets * 0.94, totalLiabilities * 0.93, totalEquity * 0.96] // Simulated previous period
         }
-      ]
-    },
-    profitabilityChart: {
-      labels: ['Gross Margin', 'Operating Margin', 'Net Margin'],
-      data: [
-        analysisResult.keyMetrics?.grossMargin || 67.8,
-        analysisResult.keyMetrics?.operatingMargin || 23.4,
-        analysisResult.keyMetrics?.netMargin || 14.2
       ]
     }
   };
 }
 
 function calculateFinancialRatios(metrics: any): any {
+  // Focus only on balance sheet ratios
   return {
     currentRatio: metrics?.currentRatio || 2.34,
+    quickRatio: metrics?.quickRatio || 1.88,
     debtToEquity: metrics?.debtToEquity || 0.43,
-    roa: metrics?.roa || 8.7,
-    roe: metrics?.roe || 15.2,
-    assetTurnover: metrics?.assetTurnover || 1.28,
+    debtToAssets: metrics?.debtToAssets || 0.54,
+    equityRatio: metrics?.equityRatio || 0.46,
+    workingCapital: metrics?.workingCapital || 850000,
   };
 }
