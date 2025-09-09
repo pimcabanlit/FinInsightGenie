@@ -44,6 +44,7 @@ export class MemStorage implements IStorage {
     const analysis: FinancialAnalysis = {
       ...insertAnalysis,
       id,
+      userId: insertAnalysis.userId || null,
       status: insertAnalysis.status || "processing",
       insights: insertAnalysis.insights || null,
       metrics: insertAnalysis.metrics || null,
