@@ -67,17 +67,18 @@ function createAnalysisPrompt(data: any[], analysisDepth: string): string {
   
   if (analysisDepth === 'basic') {
     return `
-You are performing a BASIC ANALYSIS for a finance team. Keep this simple and focused on the most important numbers.
+You are performing a BASIC BALANCE SHEET ANALYSIS for a finance team. Focus on balance sheet health and liquidity.
 
 Financial Data:
 ${dataString}
 
-BASIC ANALYSIS REQUIREMENTS:
-1. Determine if this is a Balance Sheet or Income Statement
-2. Focus ONLY on the 3 most important financial metrics
-3. Identify ONLY variances above 15% (not 10%)
-4. Provide exactly 2 main insights - keep them simple and actionable
-5. Give 2 basic recommendations that non-financial managers can understand
+BASIC BALANCE SHEET ANALYSIS REQUIREMENTS:
+1. Determine if this is a Balance Sheet or Income Statement (prioritize balance sheet metrics)
+2. Focus on the 3 most important BALANCE SHEET metrics: Current Ratio, Total Assets, and Working Capital
+3. Analyze liquidity position and financial stability
+4. Identify ONLY balance sheet variances above 15% (assets, liabilities, equity changes)
+5. Provide exactly 2 main insights about balance sheet health - keep them simple
+6. Give 2 basic recommendations for improving balance sheet position
 
 Return this JSON format:
 {
@@ -85,22 +86,24 @@ Return this JSON format:
   "insights": [
     {
       "type": "positive" | "warning" | "info",
-      "title": "Simple insight title (max 6 words)",
-      "description": "Plain language explanation (max 50 words)",
+      "title": "Balance sheet insight (max 6 words)",
+      "description": "Plain language explanation about assets, liabilities, or liquidity (max 50 words)",
       "severity": "low" | "medium" | "high"
     }
   ],
-  "recommendations": ["Simple action 1", "Simple action 2"],
+  "recommendations": ["Balance sheet action 1", "Balance sheet action 2"],
   "keyMetrics": {
-    "totalRevenue": number_or_null,
-    "netIncome": number_or_null,
-    "totalAssets": number_or_null
+    "totalAssets": number_or_null,
+    "currentRatio": number_or_null,
+    "workingCapital": number_or_null,
+    "totalLiabilities": number_or_null,
+    "totalEquity": number_or_null
   },
   "variances": [
     {
-      "item": "Line item name",
+      "item": "Balance sheet line item name",
       "change": percentage_change,
-      "type": "revenue" | "expense" | "asset" | "liability",
+      "type": "asset" | "liability" | "equity",
       "severity": "medium" | "high"
     }
   ]
@@ -108,20 +111,20 @@ Return this JSON format:
 `;
   } else if (analysisDepth === 'detailed') {
     return `
-You are performing a DETAILED ANALYSIS for experienced finance professionals. Include comprehensive technical analysis.
+You are performing a DETAILED BALANCE SHEET ANALYSIS for experienced finance professionals. Focus on comprehensive balance sheet health assessment.
 
 Financial Data:
 ${dataString}
 
-DETAILED ANALYSIS REQUIREMENTS:
-1. Determine if this is a Balance Sheet or Income Statement
-2. Calculate and analyze ALL relevant financial ratios (current ratio, debt-to-equity, ROA, ROE, gross margin, net margin, asset turnover)
-3. Perform horizontal analysis (period-over-period changes)
-4. Perform vertical analysis (components as % of total)
-5. Identify variances above 5% threshold
-6. Provide exactly 5-6 technical insights with detailed explanations
-7. Include trend analysis and ratio benchmarking
-8. Give 4-5 specific technical recommendations
+DETAILED BALANCE SHEET ANALYSIS REQUIREMENTS:
+1. Determine if this is a Balance Sheet or Income Statement (prioritize balance sheet analysis)
+2. Calculate and analyze ALL balance sheet ratios: Current Ratio, Quick Ratio, Cash Ratio, Debt-to-Equity, Debt-to-Assets, Equity Ratio, Asset Turnover, Working Capital Ratio
+3. Perform horizontal analysis on balance sheet items (period-over-period asset, liability, equity changes)
+4. Perform vertical analysis (each balance sheet component as % of total assets)
+5. Identify balance sheet variances above 5% threshold (focus on asset/liability/equity movements)
+6. Provide exactly 5-6 technical insights about balance sheet structure and liquidity position
+7. Include balance sheet trend analysis and liquidity benchmarking
+8. Give 4-5 specific technical recommendations for balance sheet optimization
 
 Return this JSON format:
 {
@@ -129,29 +132,29 @@ Return this JSON format:
   "insights": [
     {
       "type": "positive" | "warning" | "info", 
-      "title": "Technical insight title",
-      "description": "Detailed technical explanation with specific numbers and ratios (100-150 words)",
+      "title": "Balance sheet technical insight",
+      "description": "Detailed explanation of balance sheet ratios, liquidity position, capital structure, or asset composition with specific numbers (100-150 words)",
       "severity": "low" | "medium" | "high"
     }
   ],
-  "recommendations": ["Technical recommendation 1", "Technical recommendation 2", "Technical recommendation 3", "Technical recommendation 4"],
+  "recommendations": ["Balance sheet technical recommendation 1", "Capital structure recommendation 2", "Liquidity improvement recommendation 3", "Asset optimization recommendation 4"],
   "keyMetrics": {
-    "totalRevenue": number_or_null,
-    "netIncome": number_or_null,
     "totalAssets": number_or_null,
+    "totalLiabilities": number_or_null,
+    "totalEquity": number_or_null,
     "currentRatio": number_or_null,
+    "quickRatio": number_or_null,
     "debtToEquity": number_or_null,
-    "grossMargin": number_or_null,
-    "netMargin": number_or_null,
-    "roa": number_or_null,
-    "roe": number_or_null,
-    "assetTurnover": number_or_null
+    "debtToAssets": number_or_null,
+    "workingCapital": number_or_null,
+    "cashRatio": number_or_null,
+    "equityRatio": number_or_null
   },
   "variances": [
     {
-      "item": "Line item name",
+      "item": "Balance sheet line item name",
       "change": percentage_change,
-      "type": "revenue" | "expense" | "asset" | "liability", 
+      "type": "asset" | "liability" | "equity", 
       "severity": "low" | "medium" | "high"
     }
   ]
@@ -159,19 +162,19 @@ Return this JSON format:
 `;
   } else { // executive
     return `
-You are preparing an EXECUTIVE SUMMARY for C-level executives and board members. Focus on strategic business implications.
+You are preparing an EXECUTIVE BALANCE SHEET SUMMARY for C-level executives and board members. Focus on strategic balance sheet implications and financial positioning.
 
 Financial Data:
 ${dataString}
 
-EXECUTIVE SUMMARY REQUIREMENTS:
-1. Determine if this is a Balance Sheet or Income Statement
-2. Focus on strategic business performance and competitive positioning
-3. Identify key business risks and opportunities 
-4. Analyze cash flow implications and capital allocation efficiency
-5. Provide exactly 3 strategic insights focused on business direction
-6. Include market context and industry implications where relevant
-7. Give 3 board-level strategic recommendations
+EXECUTIVE BALANCE SHEET SUMMARY REQUIREMENTS:
+1. Determine if this is a Balance Sheet or Income Statement (focus on balance sheet strategic position)
+2. Focus on strategic balance sheet strength, capital structure, and financial resilience
+3. Identify key balance sheet risks and opportunities (liquidity risks, leverage concerns, asset efficiency)
+4. Analyze capital allocation strategy and balance sheet optimization opportunities
+5. Provide exactly 3 strategic insights focused on balance sheet positioning and competitive advantage
+6. Include market context regarding capital structure and industry balance sheet benchmarks
+7. Give 3 board-level strategic recommendations for balance sheet management
 
 Return this JSON format:
 {
@@ -179,26 +182,26 @@ Return this JSON format:
   "insights": [
     {
       "type": "positive" | "warning" | "info",
-      "title": "Strategic insight title",
-      "description": "Business strategy focused explanation discussing market position, competitive advantage, or strategic risk (75-100 words)",
+      "title": "Strategic balance sheet insight",
+      "description": "Strategic explanation of balance sheet position, capital structure efficiency, liquidity strategy, or competitive financial positioning (75-100 words)",
       "severity": "low" | "medium" | "high"
     }
   ],
-  "recommendations": ["Strategic recommendation 1", "Strategic recommendation 2", "Strategic recommendation 3"], 
+  "recommendations": ["Strategic balance sheet recommendation 1", "Capital structure strategy 2", "Financial positioning strategy 3"], 
   "keyMetrics": {
-    "totalRevenue": number_or_null,
-    "netIncome": number_or_null,
     "totalAssets": number_or_null,
+    "totalLiabilities": number_or_null,
+    "totalEquity": number_or_null,
     "currentRatio": number_or_null,
     "debtToEquity": number_or_null,
-    "grossMargin": number_or_null,
-    "netMargin": number_or_null
+    "workingCapital": number_or_null,
+    "cashPosition": number_or_null
   },
   "variances": [
     {
-      "item": "Line item name", 
+      "item": "Strategic balance sheet item", 
       "change": percentage_change,
-      "type": "revenue" | "expense" | "asset" | "liability",
+      "type": "asset" | "liability" | "equity",
       "severity": "medium" | "high"
     }
   ]

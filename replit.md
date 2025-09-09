@@ -1,6 +1,6 @@
 # Overview
 
-FinanceAI is a financial statement analysis application that combines AI-powered insights with data visualization. Users upload Excel-based financial statements (balance sheets or income statements), and the system provides automated analysis including financial ratios, variance analysis, AI-generated insights, and interactive charts. The application uses Azure OpenAI for intelligent financial analysis and provides a modern dashboard interface for viewing results.
+FinanceAI is a balance sheet analysis application that combines AI-powered insights with data visualization. Users upload Excel-based balance sheets, and the system provides automated analysis focusing specifically on balance sheet metrics including liquidity ratios, capital structure analysis, asset composition, variance analysis, AI-generated balance sheet insights, and interactive charts. The application uses Azure OpenAI for intelligent balance sheet analysis and provides a modern dashboard interface for viewing results.
 
 # User Preferences
 
